@@ -14,18 +14,18 @@ from ray.tune.sklearn import TuneSearchCV
 from ray.tune.search.bayesopt import BayesOptSearch
 from ray.air.integrations.mlflow import MLflowLoggerCallback, setup_mlflow
 from ray import tune
-from .config import Config
+from config import Config
 
 
 import time
 
 def train(config):
     tracking_uri = config.pop("tracking_uri", None)
-    setup_mlflow(
-        config,
-        experiment_name="setup_mlflow_example",
-        tracking_uri=tracking_uri,
-    )
+    #setup_mlflow(
+    #    config,
+    #    experiment_name="setup_mlflow_example",
+    #    tracking_uri=tracking_uri,
+    #)
 
     X, y = make_classification(
         n_samples=11000,
@@ -47,10 +47,10 @@ def train(config):
     # Eval
     y_pred = clf.predict(x_test)
     score = accuracy_score(y_test, y_pred)
-    mlflow.log_metrics(dict(score=score))
+    metrics = {"score": score}
 
-    return {"score": score}
-
+    #mlflow.log_metric()
+    return metrics
 
 
 def start_parallel(config: Config):
@@ -74,7 +74,17 @@ def start_parallel(config: Config):
             num_samples=1,
         ),
         param_space=param_space,
-        run_config=RunConfig(storage_path=ray_tracking_results, name="sgd-test-classifier")
+        run_config=RunConfig(
+            name="sgd-test-classifier",
+            storage_path=ray_tracking_results,
+            callbacks=[
+                MLflowLoggerCallback(
+                    tracking_uri=mlflow_tracking_uri,
+                    experiment_name="mlflow_callback_example",
+                    save_artifact=True,
+                )
+            ],
+        )
     )
     results = tuner.fit()
     print(results.get_best_result(metric="score", mode="min"))
@@ -82,7 +92,7 @@ def start_parallel(config: Config):
 
 
 def main():
-    config = Config(mlflow_filepath="/tmp/mlflow", ray_filepath="tmp/ray_results")
+    config = Config(mlflow_filepath="/tmp/mlflow", ray_filepath="/tmp/ray_results")
     start_parallel(config)
 
 
