@@ -1,0 +1,15 @@
+artifact_uri: file:///Users/kent.ogisu/code/exp/mlruns/703017813962497382/5e25eecb4ed94c6ab70951ebf4a86944/artifacts
+end_time: 1696877187988
+entry_point_name: ''
+experiment_id: '703017813962497382'
+lifecycle_stage: active
+run_id: 5e25eecb4ed94c6ab70951ebf4a86944
+run_name: train_function_1faf0_00003
+run_uuid: 5e25eecb4ed94c6ab70951ebf4a86944
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1696877175858
+status: 3
+tags: []
+user_id: unknown

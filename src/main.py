@@ -14,19 +14,13 @@ from ray.tune.sklearn import TuneSearchCV
 from ray.tune.search.bayesopt import BayesOptSearch
 from ray.air.integrations.mlflow import MLflowLoggerCallback, setup_mlflow
 from ray import tune
+from ray import train
 from config import Config
 
 
 import time
 
-def train(config):
-    tracking_uri = config.pop("tracking_uri", None)
-    #setup_mlflow(
-    #    config,
-    #    experiment_name="setup_mlflow_example",
-    #    tracking_uri=tracking_uri,
-    #)
-
+def train_fn(config):
     X, y = make_classification(
         n_samples=11000,
         n_features=1000,
@@ -47,29 +41,37 @@ def train(config):
     # Eval
     y_pred = clf.predict(x_test)
     score = accuracy_score(y_test, y_pred)
-    metrics = {"score": score}
+    metrics = {"score": score, "test_score": score, "dummy_metric": 100}
 
-    #mlflow.log_metric()
-    return metrics
+    # Simulate epoch training with improving score per epoch
+    for _ in range(config["mlflow"]["max_epochs"]):
+       score *= 1.02
+       metrics["score"] = score
+       train.report(metrics)
+    # return metrics
 
 
 def start_parallel(config: Config):
     mlflow_tracking_uri = config.mlflow_filepath
     ray_tracking_results = config.ray_filepath
     mlflow.set_tracking_uri(mlflow_tracking_uri)
-    mlflow.set_experiment(experiment_name="setup_mlflow_example")
+    mlflow.set_experiment(experiment_name=config.experiment_name)
     # algo = BayesOptSearch(utility_kwargs={"kind": "ucb", "kappa": 2.5, "xi": 0.0})
 
     param_space = {
         "alpha": tune.grid_search([1e-4, 1e-1, 1]),
         "epsilon": tune.grid_search([0.01, 0.1]),
-        "tracking_uri": mlflow.get_tracking_uri(),
+        "mlflow": {
+            "tracking_uri": mlflow.get_tracking_uri(),
+            "experiment_name": config.experiment_name,
+            "max_epochs": config.max_epochs
+        }
     }
 
     tuner = tune.Tuner(
-        train,
+        train_epochs,
         tune_config=tune.TuneConfig(
-            mode="min",
+            #mode="max", # [min, max]
             #search_alg=algo,
             num_samples=1,
         ),
@@ -78,21 +80,31 @@ def start_parallel(config: Config):
             name="sgd-test-classifier",
             storage_path=ray_tracking_results,
             callbacks=[
-                MLflowLoggerCallback(
-                    tracking_uri=mlflow_tracking_uri,
-                    experiment_name="mlflow_callback_example",
-                    save_artifact=True,
-                )
+               MLflowLoggerCallback(
+                   tracking_uri=mlflow_tracking_uri,
+                   experiment_name=config.experiment_name,
+                   save_artifact=True,
+               )
             ],
         )
     )
     results = tuner.fit()
-    print(results.get_best_result(metric="score", mode="min"))
+    print(results.get_best_result(metric="score", mode="max"))
+
+def train_epochs(config):
+    metrics = train_fn(config)
+    return metrics
+
 
 
 
 def main():
-    config = Config(mlflow_filepath="/tmp/mlflow", ray_filepath="/tmp/ray_results")
+    config = Config(
+        mlflow_filepath="/tmp/mlflow",
+        ray_filepath="/tmp/ray_results",
+        experiment_name="test_experiment_epoch",
+        max_epochs=10
+    )
     start_parallel(config)
 
 
