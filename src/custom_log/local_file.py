@@ -15,7 +15,7 @@ class LocalFileCallback(LoggerCallback):
         try:
             os.mkdir(dir)
         except:
-            print("folder exists")
+            print(f"There was an error creating directory: {dir}")
 
     def log_trial_start(self, trial: "Trial"):
         """Handle logging when a trial starts.
@@ -26,7 +26,7 @@ class LocalFileCallback(LoggerCallback):
         try:
             os.mkdir(f"{self.dir}/{trial.trial_id}")
         except:
-            print("folder exists")
+            print(f"There was an error creating directory: {self.dir}/{trial.trial_id}")
 
     def on_trial_result(self, iteration, trials, trial, result, **info):
         with open(f"{self.dir}/{trial.trial_id}/result.json", "a") as outfile:
