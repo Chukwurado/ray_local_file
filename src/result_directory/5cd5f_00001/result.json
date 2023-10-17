@@ -1,0 +1,131 @@
+{
+    "score": 0.87516,
+    "test_score": 0.858,
+    "dummy_metric": 100,
+    "timestamp": 1697576079,
+    "done": false,
+    "training_iteration": 1,
+    "trial_id": "5cd5f_00001",
+    "date": "2023-10-17_16-54-39",
+    "time_this_iter_s": 5.417027950286865,
+    "time_total_s": 5.417027950286865,
+    "pid": 62625,
+    "hostname": "M-C02G648RMD6M",
+    "node_ip": "127.0.0.1",
+    "config": {
+        "alpha": 0.1,
+        "epsilon": 0.01,
+        "mlflow": {
+            "tracking_uri": "/tmp/mlflow",
+            "experiment_name": "test_experiment_epoch",
+            "max_epochs": 5
+        }
+    },
+    "time_since_restore": 5.417027950286865,
+    "iterations_since_restore": 1,
+    "checkpoint_dir_name": null
+}{
+    "score": 0.8926632000000001,
+    "test_score": 0.858,
+    "dummy_metric": 100,
+    "timestamp": 1697576079,
+    "done": false,
+    "training_iteration": 2,
+    "trial_id": "5cd5f_00001",
+    "date": "2023-10-17_16-54-39",
+    "time_this_iter_s": 0.00016498565673828125,
+    "time_total_s": 5.4171929359436035,
+    "pid": 62625,
+    "hostname": "M-C02G648RMD6M",
+    "node_ip": "127.0.0.1",
+    "config": {
+        "alpha": 0.1,
+        "epsilon": 0.01,
+        "mlflow": {
+            "tracking_uri": "/tmp/mlflow",
+            "experiment_name": "test_experiment_epoch",
+            "max_epochs": 5
+        }
+    },
+    "time_since_restore": 5.4171929359436035,
+    "iterations_since_restore": 2,
+    "checkpoint_dir_name": null
+}{
+    "score": 0.9105164640000001,
+    "test_score": 0.858,
+    "dummy_metric": 100,
+    "timestamp": 1697576079,
+    "done": false,
+    "training_iteration": 3,
+    "trial_id": "5cd5f_00001",
+    "date": "2023-10-17_16-54-39",
+    "time_this_iter_s": 0.0001761913299560547,
+    "time_total_s": 5.41736912727356,
+    "pid": 62625,
+    "hostname": "M-C02G648RMD6M",
+    "node_ip": "127.0.0.1",
+    "config": {
+        "alpha": 0.1,
+        "epsilon": 0.01,
+        "mlflow": {
+            "tracking_uri": "/tmp/mlflow",
+            "experiment_name": "test_experiment_epoch",
+            "max_epochs": 5
+        }
+    },
+    "time_since_restore": 5.41736912727356,
+    "iterations_since_restore": 3,
+    "checkpoint_dir_name": null
+}{
+    "score": 0.9287267932800001,
+    "test_score": 0.858,
+    "dummy_metric": 100,
+    "timestamp": 1697576079,
+    "done": false,
+    "training_iteration": 4,
+    "trial_id": "5cd5f_00001",
+    "date": "2023-10-17_16-54-39",
+    "time_this_iter_s": 0.00020933151245117188,
+    "time_total_s": 5.417578458786011,
+    "pid": 62625,
+    "hostname": "M-C02G648RMD6M",
+    "node_ip": "127.0.0.1",
+    "config": {
+        "alpha": 0.1,
+        "epsilon": 0.01,
+        "mlflow": {
+            "tracking_uri": "/tmp/mlflow",
+            "experiment_name": "test_experiment_epoch",
+            "max_epochs": 5
+        }
+    },
+    "time_since_restore": 5.417578458786011,
+    "iterations_since_restore": 4,
+    "checkpoint_dir_name": null
+}{
+    "score": 0.9473013291456001,
+    "test_score": 0.858,
+    "dummy_metric": 100,
+    "timestamp": 1697576079,
+    "done": false,
+    "training_iteration": 5,
+    "trial_id": "5cd5f_00001",
+    "date": "2023-10-17_16-54-39",
+    "time_this_iter_s": 0.00018596649169921875,
+    "time_total_s": 5.41776442527771,
+    "pid": 62625,
+    "hostname": "M-C02G648RMD6M",
+    "node_ip": "127.0.0.1",
+    "config": {
+        "alpha": 0.1,
+        "epsilon": 0.01,
+        "mlflow": {
+            "tracking_uri": "/tmp/mlflow",
+            "experiment_name": "test_experiment_epoch",
+            "max_epochs": 5
+        }
+    },
+    "time_since_restore": 5.41776442527771,
+    "iterations_since_restore": 5,
+    "checkpoint_dir_name": null
+}

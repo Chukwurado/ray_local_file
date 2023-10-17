@@ -1,22 +1,15 @@
 import mlflow
-from sklearn.model_selection import GridSearchCV
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import SGDClassifier
 from sklearn.datasets import make_classification
 from sklearn import datasets
 from sklearn.metrics import accuracy_score
-from sklearn.datasets import load_iris
-from sklearn import tree
 
-from ray.train import RunConfig
-from ray.tune.sklearn import TuneGridSearchCV
-from ray.tune.sklearn import TuneSearchCV
-from ray.tune.search.bayesopt import BayesOptSearch
-from ray.air.integrations.mlflow import MLflowLoggerCallback, setup_mlflow
+from ray.air import RunConfig
 from ray import tune
 from ray import train
 from config import Config
-
+from custom_log import LocalFileCallback
 
 import time
 
@@ -56,7 +49,6 @@ def start_parallel(config: Config):
     ray_tracking_results = config.ray_filepath
     mlflow.set_tracking_uri(mlflow_tracking_uri)
     mlflow.set_experiment(experiment_name=config.experiment_name)
-    # algo = BayesOptSearch(utility_kwargs={"kind": "ucb", "kappa": 2.5, "xi": 0.0})
 
     param_space = {
         "alpha": tune.grid_search([1e-4, 1e-1, 1]),
@@ -71,8 +63,6 @@ def start_parallel(config: Config):
     tuner = tune.Tuner(
         train_epochs,
         tune_config=tune.TuneConfig(
-            #mode="max", # [min, max]
-            #search_alg=algo,
             num_samples=1,
         ),
         param_space=param_space,
@@ -80,16 +70,12 @@ def start_parallel(config: Config):
             name="sgd-test-classifier",
             storage_path=ray_tracking_results,
             callbacks=[
-               MLflowLoggerCallback(
-                   tracking_uri=mlflow_tracking_uri,
-                   experiment_name=config.experiment_name,
-                   save_artifact=True,
-               )
+                LocalFileCallback(dir="./result_directory") # get path from config
             ],
         )
     )
     results = tuner.fit()
-    print(results.get_best_result(metric="score", mode="max"))
+    print("BEST RESULT  ",results.get_best_result(metric="score", mode="max"))
 
 def train_epochs(config):
     metrics = train_fn(config)
@@ -103,7 +89,7 @@ def main():
         mlflow_filepath="/tmp/mlflow",
         ray_filepath="/tmp/ray_results",
         experiment_name="test_experiment_epoch",
-        max_epochs=10
+        max_epochs=5
     )
     start_parallel(config)
 
